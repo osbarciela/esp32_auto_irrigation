@@ -1,4 +1,5 @@
 #include "Config.h"
+#include "credentials.h"
 
 Config::Config() {}
 
@@ -6,12 +7,12 @@ bool Config::begin() {
     _open = _prefs.begin("irrigation", false);
     if (_open && _prefs.getUChar("initialized", 0) == 0) {
         _prefs.putUChar("initialized", 1);
-        _prefs.putString("wifi_ssid",  "wifinho");
-        _prefs.putString("wifi_pass",  "n0Voy@dimitir");
-        _prefs.putString("mqtt_host",  "192.168.1.187");
-        _prefs.putUShort("mqtt_port",  1883);
-        _prefs.putString("mqtt_user",  "oescuiso");
-        _prefs.putString("mqtt_pass",  "ImPassw0rd.12");
+        _prefs.putString("wifi_ssid",  WIFI_SSID);
+        _prefs.putString("wifi_pass",  WIFI_PASSWORD);
+        _prefs.putString("mqtt_host",  MQTT_HOST);
+        _prefs.putUShort("mqtt_port",  MQTT_PORT);
+        _prefs.putString("mqtt_user",  MQTT_USER);
+        _prefs.putString("mqtt_pass",  MQTT_PASSWORD);
         _prefs.putUChar("zone_count",  1);
 
         // Default zone 0

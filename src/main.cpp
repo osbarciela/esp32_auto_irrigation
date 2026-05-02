@@ -8,7 +8,8 @@
 #include "Telemetry.h"
 #include "OtaUpdater.h"
 
-uint32_t sensorCalibrationTimer = millis();
+
+static uint32_t lastMoisturePrintMs = 0;
 
 static Config config;
 static NtpSync ntp;
@@ -156,10 +157,14 @@ void loop()
     telemetry->loop();
     ota.loop(*ctrl);
 
-    if (millis() - sensorCalibrationTimer > 5000)
-    {
-        sensorCalibrationTimer = millis();
-        Serial.print("Sensor reading : ");
-        Serial.println(analogRead(34));
+    if (millis() - lastMoisturePrintMs >= 5000) {
+        lastMoisturePrintMs = millis();
+        for (const ZoneStatus& s : ctrl->allZoneStatuses()) {
+            Serial.printf("[Zone %d] moisture: %.1f%%  pump: %s  state: %s\n",
+                s.id,
+                s.moisturePercent,
+                s.pumpOn ? "ON" : "OFF",
+                s.sensorValid ? "" : "(sensor invalid)");
+        }
     }
 }
